@@ -4,59 +4,129 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Generate barcode for free!">
+    <meta name="keywords" content="barcode, bar, code, generator">
+    <meta name="author" content="Florian LEFEBVRE">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
         integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
 
-    <title>Hello, world!</title>
+    <title>Barcode Generator</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 </head>
 
-<body>
-    <div class="container">
+<body class="bg-light d-flex flex-column h-100">
+    <header class="position-fixed w-100">
+        <nav class="navbar navbar-expand-sm navbar-light bg-white shadow">
+            <div class="container">
+                <a class="navbar-brand" href="">
+                    <img src="favicon.ico" width="30" height="30" alt="logo" loading="lazy" class="mb-1">
+                    Barcode Generator
+                </a>
+                <div>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://github.com/florian-lefebvre/barcode-generator"
+                                target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="container" style="margin-top: 62px;">
         <div class="text-center">
-            <svg id="barcode"></svg>
+            <h1 class="display-3 mt-3 text-uppercase font-weight-bold">Barcode Generator</h1>
+            <h3 class="display-6">Generate barcode for free!</h3>
         </div>
-
-        <form id="form">
-            <div class="mb-3">
-                <label for="code" class="form-label">BarCode value</label>
-                <input type="text" class="form-control" id="code" placeholder="Ex: 32695">
-                <button type="submit" class="btn btn-success mt-3">Submit</button>
-        </form>
-        <hr>
-        <div class="cantine">
-            <img src="https://www.leferradou.fr/images/logo-leferradou.png">
+        <div class="row">
+            <div class="col-12 col-sm">
+                <form id="form">
+                    <div class="mb-3 row">
+                        <div class="col-12">
+                            <label for="text" class="form-label">Your text</label>
+                            <input type="text" class="form-control" id="code" placeholder="Ex: 32695">
+                        </div>
+                        <div class="col-12">
+                            <label for="type" class="form-label">Type</label>
+                            <select class="form-select" aria-label="Default select example" id="type">
+                                <option selected>CODE39</option>
+                                <option>CODE128</option>
+                                <option>Pharmacode</option>
+                                <option>Codabar</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-success mt-3">Generate</button>
+                            <button type="button" id="dl" class="btn btn-secondary mt-3">Download</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-12 col-sm text-center align-self-center">
+                <svg id="barcode"></svg>
+            </div>
         </div>
-    </div>
+        <svg id="barcode-dl" class="d-none"></svg>
 
+        <script>
+
+        </script>
+    </main>
+    <footer class="footer mt-auto py-3 bg-white shadow text-muted">
+        <div class="container text-center">
+            &copy; <span id="date"></span> <a href="https://florian-lefebvre.github.io/portfolio/" target="_blank" rel="noopener noreferrer" class="link-secondary">Florian LEFEBVRE</a>
+        </div>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
         crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
         integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
         crossorigin="anonymous"></script>
+    <script src="saveSvgAsPng.js"></script>
     <script>
-        document.querySelector("#form").addEventListener('submit', function (e) {
-            e.preventDefault();
-            var code = document.querySelector("#code").value;
-            JsBarcode("#barcode", code, {
-                format: "CODE39",
-                width: 1.5,
-                height: 40,
-                textMargin: 0,
-                fontSize: 10
-            });
-        });
+        (function () {
+            'use strict'
 
-        JsBarcode("#barcode", "32695", {
-            format: "CODE39",
-            width: 1.5,
-            height: 40,
-            textMargin: 0,
-            fontSize: 10
-        });
+            document.querySelector('#dl').addEventListener('click', function () {
+                saveSvgAsPng(document.getElementById("barcode-dl"), "barcode.png")
+            })
+
+            function generateBarCode(text, select) {
+                JsBarcode("#barcode", text, {
+                    format: select,
+                    textMargin: 0,
+                    fontSize: 10,
+                    background: "transparent"
+                })
+                JsBarcode("#barcode-dl", text, {
+                    format: select,
+                    width: 1.5,
+                    height: 40,
+                    textMargin: 0,
+                    fontSize: 10,
+                    background: "transparent"
+                })
+                document.getElementById("barcode").removeAttribute("width")
+                document.getElementById("barcode").setAttribute("height", "200px")
+            }
+
+            window.onload = () => {
+                document.getElementById("date").innerHTML = new Date().getFullYear()
+                generateBarCode("32695", 'CODE39')
+            }
+
+            document.getElementById("form").addEventListener('submit', function (e) {
+                e.preventDefault()
+                generateBarCode(document.getElementById("code").value, document.getElementById("type").value.toLowerCase())
+
+            })
+        })()
     </script>
 </body>
 
