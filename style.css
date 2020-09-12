@@ -1,0 +1,20 @@
+.cantine {
+  width: 8.5cm;
+  height: 5.5cm;
+  border: #000 solid 1px;
+  border-radius: 3mm;
+  padding: 3mm 7mm 0 3mm;
+}
+
+.cantine img {
+  width: 2cm;
+}
+
+/*@media print {
+    * {
+        display: none;
+    }
+    .cantine {
+        display: block!important;
+    }
+}*/
